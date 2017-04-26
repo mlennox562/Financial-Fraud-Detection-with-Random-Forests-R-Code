@@ -32,7 +32,7 @@ test_data_Class <- test_data_Class[,-1]
 
 start.time <- Sys.time()
 
-mForest<- glm(Class ~ .,
+glm_model <- glm(Class ~ .,
                data=train_data,
                family=binomial(link="logit"))
 
@@ -40,10 +40,10 @@ end.time <- Sys.time()
 time.taken <- end.time - start.time
 time.taken
 
-train_pred <- predict(mForest,newdata=train_data,type='response')
+train_pred <- predict(glm_model,newdata=train_data,type='response')
 train_pred <- ifelse(train_pred > 0.5,1,0)
 
-test_pred <- predict(mForest,newdata=test_data,type='response')
+test_pred <- predict(glm_model,newdata=test_data,type='response')
 test_pred <- ifelse(test_pred > 0.5,1,0)
 
 '========================================================================================================='
