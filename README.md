@@ -11,7 +11,7 @@ a successful algorithm, however, can be a challenging process, as only a small m
 of transactions are often classed as fraudulent by the investigators, which then leads to
 an unbalanced distribution of the target variable that eventually causes a decrease in
 the overall accuracy of the detection algorithms. That is why this project will be based
-primarily on boosting the effciency and advancing the typical back-end statistical de-
-tection methods and classiffcation techniques used to prevent fraudulent activity, while
+primarily on boosting the effciency and advancing the typical back-end statistical detection
+methods and classiffcation techniques used to prevent fraudulent activity, while
 also considering the implementation of additional strategies that have been employed
 successfully in other industries.
