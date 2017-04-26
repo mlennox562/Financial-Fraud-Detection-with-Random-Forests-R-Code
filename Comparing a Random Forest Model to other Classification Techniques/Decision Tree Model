@@ -31,7 +31,7 @@ test_data_Class <- test_data_Class[,-1]
 
 start.time <- Sys.time()
 
-mForest <- rpart(Class ~ .,
+dtree_model <- rpart(Class ~ .,
                    data=train_data,
                    method="class",
                    parms=list(split="information"),
@@ -42,9 +42,9 @@ end.time <- Sys.time()
 time.taken <- end.time - start.time
 time.taken
 
-train_pred <- predict(mForest, train_data, type = c("class"))
+train_pred <- predict(dtree_model, train_data, type = c("class"))
 
-test_pred <- predict(mForest, test_data, type = c("class"))
+test_pred <- predict(dtree_model, test_data, type = c("class"))
 
 '========================================================================================================='
 
