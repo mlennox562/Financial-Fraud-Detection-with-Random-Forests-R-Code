@@ -1,0 +1,93 @@
+library(doParallel)
+library(gbm)
+library(caret)
+
+train_data <- read.csv('C:/Users/Mark/Documents/creditcard/train.csv')
+
+test_data <- read.csv('C:/Users/Mark/Documents/creditcard/test_NoClass.csv')
+
+test_data_Class <- read.csv('C:/Users/Mark/Documents/creditcard/test_data_Class.csv')
+
+train_data <- train_data[,-1]
+
+test_data <- test_data[,-1]
+
+test_data_Class <- test_data_Class[,-1]
+
+train_data_Class <- train_data[,32]
+
+str(train_data)
+
+colnames(train_data)
+
+colnames(test_data)
+
+colnames(test_data_Class)
+
+train_data <- train_data[,-1]
+
+test_data <- test_data[,-1]
+
+test_data_Class <- test_data_Class[,-1]
+
+train_data$Class[train_data$Class==0] <- 'Good'
+train_data$Class[train_data$Class==1] <- 'Bad'
+
+train_data_Class[train_data_Class==0] <- 'Good'
+train_data_Class[train_data_Class==1] <- 'Bad'
+
+test_data_Class[test_data_Class==0] <- 'Good'
+test_data_Class[test_data_Class==1] <- 'Bad'
+
+'========================================================================================================='
+
+## GENERALIZED BOOSTED RGRESSION MODEL (BGM)  
+
+# Set up training control
+ctrl <- trainControl(method = "repeatedcv",   # 10fold cross validation
+                     number = 5,							# do 5 repititions of cv
+                     summaryFunction=twoClassSummary,	# Use AUC to pick the best model
+                     classProbs=TRUE,
+                     allowParallel = TRUE)
+
+# Use the expand.grid to specify the search space	
+# Note that the default search grid selects multiple values of each tuning parameter
+
+grid <- expand.grid(n.trees=500, 
+                    interaction.depth=10, 
+                    shrinkage=0.1,
+                    n.minobsinnode=10)
+#											
+set.seed(1951)  # set the seed
+
+# Set up to do parallel processing   
+registerDoParallel(4)		# Registrer a parallel backend for train
+getDoParWorkers()
+
+start.time <- Sys.time()
+
+gbm.tune <- train(x=train_data[,-31],y=train_data$Class,
+                  method = "gbm",
+                  metric = "ROC",
+                  trControl = ctrl,
+                  tuneGrid=grid,
+                  verbose=FALSE)
+
+end.time <- Sys.time()
+time.taken <- end.time - start.time
+time.taken
+
+train_pred <- predict(gbm.tune, train_data[,-31], type = "raw")
+
+test_pred <- predict(gbm.tune, test_data, type = c("raw"))
+
+'========================================================================================================='
+
+table(test_data_Class)
+
+library(caret)
+
+confusionMatrix(train_pred, train_data_Class, mode = "prec_recall",positive = "Bad")
+
+confusionMatrix(test_pred, test_data_Class, mode = "prec_recall",positive = "Bad")
+
