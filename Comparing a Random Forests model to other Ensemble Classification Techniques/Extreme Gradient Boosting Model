@@ -1,3 +1,5 @@
+#The training and testing datasets are read into R and then prepared for the model building phase.
+
 library(doParallel)
 library(caret)
 library(xgboost)
@@ -41,12 +43,12 @@ test_data_Class[test_data_Class==1] <- 'Bad'
 
 '========================================================================================================='
 
-## GENERALIZED BOOSTED RGRESSION MODEL (BGM)  
+## Extreme Gradient Boosting Model  
 
 # Set up training control
-ctrl <- trainControl(method = "repeatedcv",   # 10fold cross validation
+ctrl <- trainControl(method = "repeatedcv",  
                      number = 5,							# do 5 repititions of cv
-                     summaryFunction=twoClassSummary,	# Use AUC to pick the best model
+                     summaryFunction=twoClassSummary,	
                      classProbs=TRUE,
                      allowParallel = TRUE)
 
@@ -66,6 +68,8 @@ set.seed(1951)  # set the seed
 registerDoParallel(4)		# Registrer a parallel backend for train
 getDoParWorkers()
 
+#Timing the model building phase.
+
 start.time <- Sys.time()
 
 gbm.tune <- train(x=train_data[,-31],y=train_data$Class,
@@ -79,6 +83,8 @@ end.time <- Sys.time()
 time.taken <- end.time - start.time
 time.taken
 
+#Making Predictions on the test and train data
+
 train_pred <- predict(gbm.tune, train_data[,-31], type = "raw")
 
 test_pred <- predict(gbm.tune, test_data, type = c("raw"))
@@ -88,6 +94,8 @@ test_pred <- predict(gbm.tune, test_data, type = c("raw"))
 table(test_data_Class)
 
 library(caret)
+
+#Obtaining F1, recall and precision scores for the model 
 
 confusionMatrix(train_pred, train_data_Class, mode = "prec_recall",positive = "Bad")
 
