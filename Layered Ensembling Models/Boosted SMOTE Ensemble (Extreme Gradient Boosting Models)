@@ -1,3 +1,5 @@
+#Timing the entire procedure to compare with earlier classifiers.
+
 start.time <- Sys.time()
 
 library(caret)
@@ -10,6 +12,8 @@ library(parallelMap)
 library(parallel)
 
 registerDoMC(cores = detectCores())
+
+#The training and testing datasets are read into R and then prepared for the model building phase.
 
 train.raw.origional <- read.csv("C:/Users/Mark/Documents/creditcard/train.csv",stringsAsFactors = FALSE)
 
@@ -29,9 +33,11 @@ test.raw <- test.raw[,-1]
 
 test.raw$Time <- as.numeric(test.raw$Time)
 
-test.raw$Amount <- scale(test.raw$Amount)
+#Test whether normalising the Amount and Time variables helps prediction accuracy. 
 
-test.raw$Time <- scale(test.raw$Time)
+#test.raw$Amount <- scale(test.raw$Amount)
+
+#test.raw$Time <- scale(test.raw$Time)
 
 prepL0FeatureSet1 <- function(df) {
   id <- df$id
@@ -143,7 +149,11 @@ makeOneFoldTestPrediction <- function(this_fold,feature_set) {
 
 Predictions <- data.frame(test.raw$id)
 
+#This procedure will build 20 SMOTE based XGB models.
+
 n <- 20
+
+#F1-scores for each training set will be stored in a list. 
 
 F1_scores_train <- list()
 
