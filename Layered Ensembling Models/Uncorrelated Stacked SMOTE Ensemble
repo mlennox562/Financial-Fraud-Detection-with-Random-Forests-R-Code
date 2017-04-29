@@ -1,3 +1,5 @@
+#Timing the entire procedure to compare with earlier classifiers.
+
 start.time <- Sys.time()
 
 #Adapted from the caret vignette
@@ -12,6 +14,8 @@ library(parallel)
 registerDoMC(cores = detectCores())
 
 '================================================================================================================='
+
+#The training and testing datasets are read into R and then prepared for the model building phase.
 
 test.raw.class <- read.csv("C:/Users/Mark/Documents/creditcard/test_data_Class.csv",stringsAsFactors = FALSE)
 
@@ -39,13 +43,15 @@ test.raw$Time<- as.numeric(test.raw$Time)
 
 train.raw$Time<- as.numeric(train.raw$Time)
 
-train.raw$Time <- scale(train.raw$Time)
+#Test whether normalising the Amount and Time variables helps prediction accuracy. 
 
-test.raw$Time <- scale(test.raw$Time)
+#train.raw$Time <- scale(train.raw$Time)
 
-train.raw$Amount <- scale(train.raw$Amount)
+#test.raw$Time <- scale(test.raw$Time)
 
-test.raw$Amount <- scale(test.raw$Amount)
+#train.raw$Amount <- scale(train.raw$Amount)
+
+#test.raw$Amount <- scale(test.raw$Amount)
 
 '================================================================================================================='
 
@@ -59,6 +65,8 @@ test.raw$Amount <- scale(test.raw$Amount)
 #   allowParallel=TRUE
 # )
 
+#Cross-Validated training data 5 times. 
+
 my_control <- trainControl(
   method = "cv",
   number = 5,
@@ -68,6 +76,8 @@ my_control <- trainControl(
   allowParallel=TRUE
 )
 
+#Functions for creating ensembles of caret models.
+
 library("caretEnsemble")
 model_list <- caretList(
   Class~., data=train.raw,
@@ -75,6 +85,8 @@ model_list <- caretList(
   methodList=c("glm","rpart","nnet","ranger","xgbTree","gbm"),
   metric="ROC"
 )
+
+#Train model as a meta-model, and caretEnsemble will make a robust linear combination of models using a glm.
 
 xgb_ensemble <- caretStack(
   model_list,
