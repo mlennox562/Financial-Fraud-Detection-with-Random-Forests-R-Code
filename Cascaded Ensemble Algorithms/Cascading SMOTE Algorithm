@@ -1,3 +1,5 @@
+#Timing the entire procedure to compare with earlier classifiers.
+
 start.time <- Sys.time()
 
 library(caret)
@@ -11,13 +13,17 @@ library(parallel)
 
 registerDoMC(cores = detectCores())
 
+#The training and testing datasets are read into R and then prepared for the model building phase.
+
 train.raw.origional <- read.csv("C:/Users/Mark/Documents/creditcard/train.csv",stringsAsFactors = FALSE)
 
 train.raw.origional <- train.raw.origional[,-1]
 
-train.raw.origional$Amount <- scale(train.raw.origional$Amount)
+#Test whether normalising the Amount and Time variables helps prediction accuracy. 
 
-train.raw.origional$Time <- scale(train.raw.origional$Time)
+#train.raw.origional$Amount <- scale(train.raw.origional$Amount)
+
+#train.raw.origional$Time <- scale(train.raw.origional$Time)
 
 test.raw.class <- read.csv("C:/Users/Mark/Documents/creditcard/test_data_Class.csv",stringsAsFactors = FALSE)
 
@@ -27,9 +33,11 @@ test.raw <- test.raw[,-1]
 
 test.raw$Time <- as.numeric(test.raw$Time)
 
-test.raw$Amount <- scale(test.raw$Amount)
+#Test whether normalising the Amount and Time variables helps prediction accuracy. 
 
-test.raw$Time <- scale(test.raw$Time)
+#test.raw$Amount <- scale(test.raw$Amount)
+
+#test.raw$Time <- scale(test.raw$Time)
 
 prepL0FeatureSet1 <- function(df) {
   id <- df$id
@@ -263,6 +271,9 @@ for(i in c(1:10)){
   train.raw.missed$Class <- as.factor(ifelse(train.raw.missed$Class == 0,'Good', 'Bad'))
   
   train.raw <- rbind(train.raw, train.raw.missed)
+  
+  #If the recall and precision scores rach 1 then the process stops early. 
+  #Otherwise it continues to add the incorrectly classified training transactions. 
   
   if(recall==1 & precision==1){
     break
