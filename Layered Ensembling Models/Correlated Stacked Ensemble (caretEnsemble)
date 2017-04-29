@@ -1,3 +1,5 @@
+#Timing the entire procedure to compare with earlier classifiers.
+
 start.time <- Sys.time()
 
 #Adapted from the caret vignette
@@ -10,6 +12,8 @@ library(parallelMap)
 library(parallel)
 
 registerDoMC(cores = detectCores())
+
+#The training and testing datasets are read into R and then prepared for the model building phase.
 
 test.raw.class <- read.csv("C:/Users/Mark/Documents/creditcard/test_data_Class.csv",stringsAsFactors = FALSE)
 
