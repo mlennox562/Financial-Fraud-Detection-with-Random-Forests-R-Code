@@ -1,3 +1,5 @@
+#The training and testing datasets are read into R and then prepared for the model building phase.
+
 library(nnet)
 
 train_data <- read.csv('C:/Users/Mark/Documents/creditcard/train.csv')
@@ -30,6 +32,8 @@ test_data_Class <- test_data_Class[,-1]
 
 '========================================================================================================='
 
+#Timing the model building phase.
+
 start.time <- Sys.time()
 
 set.seed(199)
@@ -42,6 +46,8 @@ end.time <- Sys.time()
 time.taken <- end.time - start.time
 time.taken
 
+#Making Predictions on the test and train data
+
 train_pred <- as.factor(predict(model_nnet, train_data, type="class"))
 
 test_pred <- as.factor(predict(model_nnet, test_data, type="class"))
@@ -51,6 +57,8 @@ test_pred <- as.factor(predict(model_nnet, test_data, type="class"))
 table(test_data_Class)
 
 library(caret)
+
+#Obtaining F1, recall and precision scores for the model 
 
 confusionMatrix(train_pred, as.factor(train_data_Class), mode = "prec_recall",positive = "1")
 
