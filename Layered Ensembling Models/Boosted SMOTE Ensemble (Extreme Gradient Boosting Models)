@@ -21,9 +21,11 @@ train.raw.origional <- train.raw.origional[,-1]
 
 train.raw.origional <- train.raw.origional[,-1]
 
-train.raw.origional$Amount <- scale(train.raw.origional$Amount)
+#Test whether normalising the Amount and Time variables helps prediction accuracy. 
 
-train.raw.origional$Time <- scale(train.raw.origional$Time)
+#train.raw.origional$Amount <- scale(train.raw.origional$Amount)
+
+#train.raw.origional$Time <- scale(train.raw.origional$Time)
 
 test.raw.class <- read.csv("C:/Users/Mark/Documents/creditcard/test_data_Class.csv",stringsAsFactors = FALSE)
 
