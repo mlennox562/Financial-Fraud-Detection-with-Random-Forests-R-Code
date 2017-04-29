@@ -4,6 +4,8 @@ library("mlbench")
 library("pROC")
 library("caretEnsemble")
 
+#The training and testing datasets are read into R and then prepared for the model building phase.
+
 test.raw.class <- read.csv("C:/Users/Mark/Documents/creditcard/test_data_Class.csv",stringsAsFactors = FALSE)
 
 train.raw <- read.csv("C:/Users/Mark/Documents/creditcard/train.csv",stringsAsFactors = FALSE)
@@ -40,6 +42,8 @@ test.raw$Amount <- scale(test.raw$Amount)
 
 '================================================================================================================='
 
+#Reading an XGB model into R to make predictions.
+
 xgb_mdl <- readRDS("C:/Users/Mark/Documents/creditcard/xgb_subset_ensemble.rds")
 
 xgb_mdl_yhat <- predict(xgb_mdl,newdata = train.raw[,-31],type = "prob")
@@ -51,6 +55,8 @@ df <- data.frame()
 for (i in c(1:99)) {
   
   metrics <- confusionMatrix(as.factor(ifelse(predict(xgb_mdl,newdata = test.raw,type = "prob") > i/n,'1','0')), as.factor(test.raw.class$Class), mode = "prec_recall",positive = "1")
+  
+  #Storing metrics as a dataframe 
   
   df[i,1] <- i/n
   df[i,2] <- metrics$byClass[5]
