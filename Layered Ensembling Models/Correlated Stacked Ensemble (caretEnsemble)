@@ -51,6 +51,8 @@ test.raw$Amount <- scale(test.raw$Amount)
 
 '================================================================================================================='
 
+#Cross-Validated training data 5 times. 
+
 my_control <- trainControl(method="repeatedcv",
                            number=5,
                            repeats=1,
@@ -58,6 +60,8 @@ my_control <- trainControl(method="repeatedcv",
                            summaryFunction = twoClassSummary,
                            classProbs = TRUE,
                            allowParallel = TRUE)
+
+#Functions for creating ensembles of caret models.
 
 library("caretEnsemble")
 
