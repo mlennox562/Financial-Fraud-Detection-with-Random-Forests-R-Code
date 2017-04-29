@@ -1,3 +1,4 @@
+#The training and testing datasets are read into R and then prepared for the model building phase.
 
 train_data <- read.csv('C:/Users/Mark/Documents/creditcard/train.csv')
 
