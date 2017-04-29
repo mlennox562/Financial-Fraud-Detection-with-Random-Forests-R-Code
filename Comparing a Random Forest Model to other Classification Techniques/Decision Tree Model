@@ -30,6 +30,8 @@ test_data_Class <- test_data_Class[,-1]
 
 '========================================================================================================='
 
+#Timing the model building phase.
+
 start.time <- Sys.time()
 
 dtree_model <- rpart(Class ~ .,
@@ -43,15 +45,17 @@ end.time <- Sys.time()
 time.taken <- end.time - start.time
 time.taken
 
+#Making Predictions on the test and train data
+
 train_pred <- predict(dtree_model, train_data, type = c("class"))
 
 test_pred <- predict(dtree_model, test_data, type = c("class"))
 
 '========================================================================================================='
 
-table(test_data_Class)
-
 library(caret)
+
+#Obtaining F1, recall and precision scores for the model 
 
 confusionMatrix(train_pred, train_data_Class, mode = "prec_recall",positive = "1")
 
