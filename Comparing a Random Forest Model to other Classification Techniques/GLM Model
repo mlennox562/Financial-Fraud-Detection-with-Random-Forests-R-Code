@@ -1,4 +1,4 @@
-#The training and testing datasets are read into R and then prepared for the sparklyr model building phase.
+#The training and testing datasets are read into R and then prepared for the model building phase.
 
 library(rpart)
 
