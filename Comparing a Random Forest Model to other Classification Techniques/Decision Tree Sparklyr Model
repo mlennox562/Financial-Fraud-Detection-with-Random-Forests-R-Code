@@ -1,3 +1,5 @@
+#The training and testing datasets are read into R and then prepared for the sparklyr model building phase.
+
 library(sparklyr)
 library(dplyr)
 library(ggplot2)
@@ -32,12 +34,16 @@ test_data <- test_data[,-1]
 
 test_data_Class <- test_data_Class[,-1]
 
+#Creating a spark data-table for both the training and testing datasets.  
+
 train_data_tbl <- copy_to(sc, train_data, "train_data", overwrite = TRUE)%>% 
   mutate(Class = as.character(Class))
 
 test_data_tbl <- copy_to(sc, test_data, "test_data", overwrite = TRUE)
 
 '========================================================================================================='
+
+#Timing the model building phase.
 
 start.time <- Sys.time()
 
@@ -53,6 +59,8 @@ end.time <- Sys.time()
 time.taken <- end.time - start.time
 time.taken
 
+#Making Predictions on the test and train data
+
 train_pred <- predict(mTree, train_data_tbl)
 
 test_pred <- predict(mTree, test_data_tbl)
@@ -62,6 +70,8 @@ test_pred <- predict(mTree, test_data_tbl)
 table(test_data_Class)
 
 library(caret)
+
+#Obtaining F1, recall and precision scores for the model 
 
 confusionMatrix(train_pred, train_data_Class, mode = "prec_recall",positive = "1")
 
