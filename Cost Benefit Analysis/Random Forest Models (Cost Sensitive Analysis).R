@@ -1,5 +1,5 @@
 library(mlr)
-library(parallelMap)
+library(parallelMap) #Unified parallelization framework for multiple back-end, designed for internal package and interactive usage. 
 parallelStartSocket(3)
 
 '========================================================================================================='
