@@ -15,3 +15,14 @@ primarily on boosting the effciency and advancing the typical back-end statistic
 methods and classiffcation techniques used to prevent fraudulent activity, while
 also considering the implementation of additional strategies that have been employed
 successfully in other industries.
+
+CONTENTS:
+
+1.  Training and Testing Dataset 
+2.  Comparing a Random Forest Model to other Classification Techniques
+3.  Techniques to Deal with Imbalance	
+4.  Cost Benefit Analysis
+5.  Comparing a Random Forest Model to Other Ensemble Classification Techniques
+6.  Layered Ensembling Models
+7.  Cascaded Ensemble Algorithm
+8.  Extension
